@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Sender</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html{
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            margin-top: 80px; /* Ensure content starts below the fixed navbar */
+        }
+
+    .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #fff;
+            border-radius: 30px;
+            margin: 15px;
+            position: fixed;
+            width: calc(100% - 30px);
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo a {
+            color: #1166ed;
+            font-size: 24px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            padding-right: 70px;
+        }
+
+        .nav-links li {
+            margin-left: 40px;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #1166ed;
+        }
+
+        /* Hamburger menu for mobile */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Transform hamburger into X when active */
+        .hamburger.active .line1 {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active .line2 {
+            opacity: 0;
+        }
+
+        .hamburger.active .line3 {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                top: 60px;
+                left: -100%;
+                width: 100%;
+                height: 100vh;
+                background-color: #4287f5;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 20px 0;
+            }
+
+            .nav-links a {
+                color: #fff;
+                font-size: 20px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger div {
+                background-color: #333;
+            }
+        }
+
+        /* Hero section styles */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px; /* Increased padding on left and right sides */
+            text-align: center;
+            margin: 15px;
+            
+            
+        }
+
+        .hero h1 {
+            color: #1166ed;
+            font-size: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 50px;
+        }
+
+        .hero h1 span {
+            color: black; /* Color for "Email Marketing" */
+        }
+
+        .hero p {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .hero button {
+            background-color: #1166ed;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: fit-content;
+        }
+
+        .hero button:hover {
+            background-color: #1166ed;
+        }
+
+        /* Infinite scroll section styles */
+        .company_logo_scroll,.scroll_partner{
+display:flex;
+flex-direction:row;
+align-items:center;
+overflow: hidden;
+
+}
+.company_logo_scroll{
+  display: flex;
+  padding: 30px 0px;
+}
+.ticker-track{
+display:flex;
+flex-direction:row;
+align-items:center;
+justify-content:flex-start;
+max-width:unset;
+flex-grow:0;
+flex-shrink:0;
+}
+@keyframes ticker {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.ticker-track {
+  animation: ticker 30s linear infinite;
+}
+.image{
+  height: 70px;
+  padding: 10px 40px;
+}
+
+
+
+
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 50px 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 2px 4px 2px 4px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #1166ed; /* Updated color */
+            font-weight: 700;
+            margin-bottom: 30px; /* Increased font weight */
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        input[type="text"], 
+        input[type="email"], 
+        input[type="password"], 
+        select, 
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        textarea {
+            margin-top: 5px;
+            height: 150px;
+            resize: vertical;
+        }
+        .file-upload {
+            margin-bottom: 20px; /* Adds space below the file upload section */
+            padding: 0 10px; /* Adds space on the left and right sides */
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+        }
+        .file-upload input[type="file"] {
+            width: calc(100% - 20px); /* Adjusts width considering padding */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+
+        .report-wrapper {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 2px 4px 2px 4px rgba(0,0,0,0.2);
+            max-width: 600px;
+            margin: 90px auto;
+            padding: 30px;
+        }
+
+        .report-wrapper h2 {
+            color: #333;
+            margin: 0 0 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .report-wrapper canvas {
+            width: 100%;
+            height: 100px;
+            height: 200px; /* Adjusted height for a pie chart */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 40px 30px ;
+        }
+
+        .report-wrapper #report {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        .report-wrapper #report p {
+            margin: 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .report-wrapper #successCount {
+            color: #28a745; /* Green for success */
+        }
+
+        .report-wrapper #failureCount {
+            color: #dc3545; /* Red for failure */
+        }
+        .info-icon {
+  display: inline-block;
+  margin-left: 8px;
+  cursor: help;
+  font-size: 14px;
+  background-color: yellow;
+  border-radius: 50%;
+  padding: 5px; /* Adjust size as needed */
+}
+
+.info-icon::after {
+  content: attr(title);
+  display: none;
+  position: absolute;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.info-icon:hover::after {
+  display: block;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
+}
+
+.example-text {
+    font-size: 0.7em;
+    color: #1166ed;
+    padding: 5px 0px;
+}
+
+
+footer {
+            background-color: #1166ed;
+            color: white;
+            padding: 40px 40px 10px 40px;
+            font-family: 'Raleway', sans-serif;
+            
+        }
+
+        footer .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        footer .footer-section {
+            flex: 1 1 200px;
+            margin: 10px 40px;
+        }
+
+        footer h3 {
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        footer p, footer li, footer a {
+            font-size: 16px;
+            color: white;
+            margin-bottom: 10px;
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            footer .footer-container {
+                flex-direction: column;
+                text-align: left; /* Align content to the left for small devices */
+            }
+
+            footer .footer-section {
+                margin-bottom: 30px;
+            }
+        }
+
+        /* Line between content and copyright */
+        footer .divider {
+            width: 100%;
+            height: 1px;
+            background-color: white;
+            margin: 20px 0px 15px 0px;
+        }
+
+        footer .copyright {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+
+</style>
+
+
+</head>
+<body>
+  
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="#">EmailSender</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Blogs</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>
+            Boost Your Reach with <br>Our <span>Email Marketing</span> Services!
+        </h1>
+        <p>Unlock powerful strategies and tailor-made campaigns to engage your audience and<br> drive conversions.Let’s elevate your email game together!</p>
+        <button><a href="#email-form" style="text-decoration: none;color: white;font-weight: bold;">Start Now</a></button>
+    </section>
+
+    <div class="company_logo_scroll">
+  
+        <div class="ticker-track">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81acf06ed9925549e9.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81b1b532791773bc40.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81b1b532380c73bc3e.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81c9fed21ad8e5080f.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e8173d3b0844442c0ff.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e818c684dee69b2b0d3.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e813ae3336f505214db.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81acf06e82045549ea.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81b1b5326b0d73bc3f.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81fcc42100990a986a.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81c9fed25ef6e5080e.webp" alt="Image">
+        <img class="image" src="https://storage.googleapis.com/msgsndr/g9kgibJbjpcwTcDBUVML/media/66685e81fcc42102160a986b.webp" alt="Image">
+        
+        </div>
+        
+        </div>
+
+    <div class="container" id="email-form">
+        <h1>Send Emails</h1>
+        <form id="emailForm" action="/sendEmails" method="post" enctype="multipart/form-data">
+            <label for="smtpHost">SMTP Host</label>
+            <select id="smtpHost" name="smtpHost" required>
+                <option value="smtp.gmail.com">Gmail SMTP</option>
+                <option value="smtp.zoho.com">Zoho SMTP (Personal domain)</option>
+                <option value="smtppro.zoho.in">Zoho SMTP (Organization domain)</option>
+                <option value="smtp.outlook.com">Outlook SMTP</option>
+            </select>
+
+            <label for="smtpUser">Sender Mail</label>
+            <input type="email" id="smtpUser" name="smtpUser" required>
+
+            <label for="smtpPass">
+                Email Password
+                <span class="info-icon" title="If you use Gmail, generate a 16 digit  app password named 'Nodemailer' and enter in the Email password field ">ℹ️</span>
+              </label>
+              <input type="password" id="smtpPass" name="smtpPass" required>
+              
+              <label for="ccEmails">CC Emails (comma separated):</label>
+    <input type="text" name="ccEmails" id="ccEmails" placeholder="e.g., example@gmail.com, example@domain.com"><br>
+
+
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" required>
+
+            <label for="emailBody">Email Body (HTML,TEXT)</label>
+            <p class="example-text"><span style="color:#dc3545;">Note:</span> If you use custom fields in the email content, mention them like {{name}}, {{salutation}}, {{email}}, {{phone_no}}, {{position}}.</p>
+            <textarea id="emailBody" name="emailBody" required></textarea>            
+
+            <label for="csvFile">CSV File</label>
+            <div class="file-upload">
+                <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
+            </div>
+
+            <button type="submit">Send Emails</button>
+        </form>
+    </div>
+    <div class="report-wrapper">
+        <h2>Email Report</h2>
+        <div class="report-container" id="reportSection">
+            <canvas id="emailChart"></canvas>
+            <div id="report">
+                <p id="successCount">Success: 0</p>
+                <p id="failureCount">Failure: 0</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <!-- About Section -->
+            <div class="footer-section">
+                <h3>About EmailSender</h3>
+                <p>EmailSender is a platform that provides expert email marketing services to help you reach and engage your audience effectively.</p>
+            </div>
+    
+            <!-- Quick Links Section -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Blogs</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+    
+            <!-- Contact Section -->
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@emailsender.com</p>
+                <p>Phone: +1-800-555-1234</p>
+                <p>Address: 123 EmailSender St, Marketing City, USA</p>
+            </div>
+        </div>
+    
+        <!-- White line divider between footer content and copyright -->
+        <div class="divider"></div>
+    
+        <div class="copyright">
+            <p>&copy; 2024 EmailSender. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+  <script>
+    document.getElementById('emailForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+
+      // Show loading indicator
+      document.body.style.cursor = 'wait';
+
+      if (confirm('Are you sure you want to send the emails?')) {
+        try {
+          const response = await fetch('/sendEmails', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const result = await response.json();
+          const report = result.report;
+
+          // Show report section
+          document.getElementById('reportSection').style.display = 'block';
+
+          // Display counts
+          document.getElementById('successCount').textContent = `Success: ${report.success.length}`;
+          document.getElementById('failureCount').textContent = `Failure: ${report.failure.length}`;
+
+          // Create chart
+          const ctx = document.getElementById('emailChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: ['Success', 'Failure'],
+              datasets: [{
+                label: 'Email Report',
+                data: [report.success.length, report.failure.length],
+                backgroundColor: ['#4caf50', '#f44336'],
+              }],
+            },
+            options: {
+              responsive: true,
+            },
+          });
+
+          // Display success notification
+          alert('Emails have been sent successfully!');
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred while sending emails.');
+        } finally {
+          // Hide loading indicator
+          document.body.style.cursor = 'default';
+        }
+      }
+    });
+
+
+
+//Navbar
+
+    function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            const hamburger = document.querySelector('.hamburger');
+            
+            // Toggle active class for both nav links and hamburger icon
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+  </script>
+</body>
+</html>
