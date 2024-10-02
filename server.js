@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+
 // Function to replace placeholders in the email template
 function fillTemplate(template, data, defaultFields) {
   const defaults = defaultFields || {};
@@ -44,6 +45,13 @@ function parseCustomFields(customFieldsStr = '') {
     }
     return acc;
   }, {});
+}
+
+// Function to extract name from email address if no sender name is provided
+function extractNameFromEmail(email) {
+  if (!email) return 'Unknown Sender';
+  const nameFromEmail = email.split('@')[0]; // Take the part before '@'
+  return nameFromEmail.replace('.', ' '); // Replace periods with spaces for better readability
 }
 
 // Function to download a file from a remote URL and return a stream
@@ -99,14 +107,17 @@ app.post('/sendEmails', upload.single('csvFile'), async (req, res) => {
     ccEmails = '',
     emailBody,
     customFields = '',
+    senderName = '' // Add senderName field from the form
   } = req.body;
+
+  console.log('Received senderName:', senderName);
 
   const csvFilePath = req.file.path;
   const defaultFields = parseCustomFields(customFields);
   const ccEmailsList = ccEmails.split(',').map(email => email.trim()).filter(email => email);
 
   const portNumber = () => {
-    return (smtpHost === "smtp.gmail.com" || smtpHost === "smtp.zoho.com") ? 465 : 587;
+    return (smtpHost === "smtppro.zoho.in" || smtpHost === "smtp-mail.outlook.com") ? 587 : 465;
   };
 
   // Create transporter
@@ -126,8 +137,11 @@ app.post('/sendEmails', upload.single('csvFile'), async (req, res) => {
   async function sendEmail(to, template, attachmentStream, filename, data) {
     const filledBody = fillTemplate(template, data, defaultFields);
 
+    // Determine the sender name: use provided or fallback to email
+    const finalSenderName = senderName || extractNameFromEmail(smtpUser);
+
     const mailOptions = {
-      from: smtpUser,
+      from: `"${finalSenderName}" <${smtpUser}>`, // Use sender name with email
       to: to,
       cc: ccEmailsList,
       subject: subject,
